@@ -26,6 +26,7 @@ var audio = new Audio('img/raindrop.mp4');
 var audio = new Audio('img/mushroom.mp4');
 audio.play();
 
+
 let mushSprite = new Image();
 mushSprite.src = "img/mush.png";
 
@@ -127,14 +128,14 @@ function input(event) {
 }
 
 
+function collision(){
 
 
 
 
 
 
-
-
+}
 
 function update() {
     // console.log("Update");
@@ -181,12 +182,117 @@ function update() {
     } else if (gamerInput.action === "None") {
     }
 
+
+
+}
    // if (mushD  = maze1) {
    //     (gomush -= speed)
    // }
+
+
+
+
+
+const widthMaze = 1100;
+const hightMaze = 500;
+const CELL_SIZE = 100;
+const WALL_COLOR = "#fabcc6";
+const PATH_COLOR = "#ff002b";
+const ROWS = 11
+const COLS = 5
+
+let level = 1
+
+let bushSprite = new Image ();
+bushSprite.src = "img/bush.png";
+
+let petalSprite = new Image();
+petalSprite.src = "img/flowerO.png";
+
+
+let bush = Array(COLS)
+  .fill()
+  .map(() => Array(ROWS).fill(new GameObject(bushSprite, 0, 0, CELL_SIZE, CELL_SIZE)));
+
+
+let maze = Array(COLS)
+  .fill()
+  .map(() => Array(ROWS).fill(1));
+
+
+  let petal = Array(COLS)
+  .fill()
+  .map(() => Array(ROWS).fill(new GameObject(petalSprite, 0, 0, CELL_SIZE, CELL_SIZE)));
+
+// 0 is path
+// 1 is wall
+// 2 is petal
+
+mazeLevel1 = [[0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1], 
+              [1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0],
+              [1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0],
+              [1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0],
+              [1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 2]]
+
+mazeLevel2 = [[0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
+              [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+              [1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1],
+              [1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1],
+              [1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 2]]
+
+mazeLevel3 = [[0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1], 
+              [1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1],
+              [1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1],
+              [1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1],
+              [1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 2]]
+
+maze = mazeLevel1
+
+function nextLevel()
+{
+    if (level === 1)
+    {
+        
+        maze = mazeLevel2
+        level = 2
+        
+    }
+    if (level === 2)
+    {
+        maze = mazeLevel3
+        level = 3
+    }
+    if (level === 3)
+    {
+        // End of game
+        return
+    }
+
+    // reset player position
 }
 
+function drawMaze() {
+  context.clearRect(0, 0, canvas.widthMaze, canvas.height);
 
+  for (let r = 0; r < COLS; r++) {
+    for (let c = 0; c < ROWS; c++) {
+      if (maze[r][c] === 1)
+      {
+        bush[r][c].x = c * CELL_SIZE
+        bush[r][c].y = r * CELL_SIZE
+        context.drawImage(bushSprite, bush[r][c].x, bush[r][c].y, bush[r][c].width, bush[r][c].height)
+      }
+      if (maze[r][c] == 2)
+      {
+        petal[r][c].x = c * CELL_SIZE
+        petal[r][c].y = r * CELL_SIZE
+        context.drawImage(petalSprite, petal[r][c].x, petal[r][c].y, petal[r][c].width, petal[r][c].height)
+      }
+    }
+  }
+}
+drawMaze();
+  
 
 function gameloop() {
     //calls the setup function on first itteration of loop [Note:bool variable method used to allow for toggeling setupComplete to false and triggering setup() for starting a new level of the game]
@@ -204,9 +310,24 @@ function gameloop() {
 
       audio.play();
       bool = true;
+       
+
+
+
+     //   switch (event.keyCode) { 
+
+              
+
+       //     case 77:  
+
+       //        bool = false; 
+
+      //          break; } 
+
+       // } 
     update();
     draw();
-    
+    drawMaze();
     window.requestAnimationFrame(gameloop);
 }
 
