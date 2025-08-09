@@ -23,8 +23,8 @@ let speed = 4;
 //let height = 500
 
 var rainAudio = new Audio('img/raindrop.mp4');
-//var backgroundAudio = new Audio('img/mushroom.mp4');
-//backgroundAudio.play();
+var backgroundAudio = new Audio('img/mushroom.mp4');
+backgroundAudio.play();
 
 
 let mushSprite = new Image();
@@ -75,6 +75,22 @@ function draw() {
 
 //movement input
 
+function musicButton(){
+
+backgroundAudio.play = true;
+
+addEventListener(click)
+if (backgroundAudio. paused){
+    backgroundAudio.play();
+    button2.textContent = "Mute";
+}
+else {
+    backgroundAudio.pause();
+    button2.textContent = "Play";
+}
+
+
+}
 
 
 
@@ -400,14 +416,6 @@ function gameloop() {
   
     //displayTitle();
   
- 
-
-      //audio.play();
-      //bool = true;
-       
-  
-
-
      //   switch (event.keyCode) { 
 
               
