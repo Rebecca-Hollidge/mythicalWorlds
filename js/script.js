@@ -7,9 +7,9 @@ const context = canvas.getContext("2d");
 
  let currentFrame = 0
 
-const scale = 1;
-const scaledWidth = width - 28;
-const scaledHeight = height - 28;
+const scale = 0.5;
+const scaledWidth = width - 30;
+const scaledHeight = height - 30;
 const Audioloop = 0;
 
 let currentLoopIndex = 0;
@@ -22,21 +22,24 @@ let speed = 4;
 //let width = 1100 
 //let height = 500
 
-var audio = new Audio('img/raindrop.mp4');
-var audio = new Audio('img/mushroom.mp4');
-audio.play();
+var rainAudio = new Audio('img/raindrop.mp4');
+//var backgroundAudio = new Audio('img/mushroom.mp4');
+//backgroundAudio.play();
 
 
 let mushSprite = new Image();
 mushSprite.src = "img/mush.png";
 
-let gomush = new GameObject(mushSprite, 100, 100, 100, 100);
+let gomush = new GameObject(mushSprite, 0, 0, scaledWidth, scaledHeight);
 //let gomaze1 = new GameObject(maze1Sprite, 200, 200, 100, 100);
 
 
 let groundSprite = new Image ();
 groundSprite.src = "img/ground.png";
 let goground = new GameObject(groundSprite, 0, 0,100, 100);
+
+let startSprite = new Image();
+startSprite.src = "img/start.png";
 
 function GameObject(spritesheet, x, y, width, height) {
     this.spritesheet = spritesheet;
@@ -113,7 +116,7 @@ function input(event) {
                 gamerInput = new GamerInput("Down");
                 break; //Down key
             case 32:
-                speed = 4;
+                speed = 6;
                 break;
             default:
                 gamerInput = new GamerInput("None"); //No Input
@@ -121,21 +124,52 @@ function input(event) {
 
     } else {
         gamerInput = new GamerInput("None");
-        speed = 2;
+        speed = 3;
         
     }
 
 }
 
 
-function collision(){
+function setTimer() {
+  let totalTime = 15;
+  let timeRemaining = totalTime;
 
+  const interval = setInterval(() => {
+    timeRemaining--;
+    console.log("Time:", timeRemaining);
 
-
-
-
-
+    if (timeRemaining <= 0) {
+      clearInterval(interval);
+      console.log("You lose");
+      // Handle loss
+    }
+  }, 1000);
 }
+
+
+
+//colltion attempt 
+//function collision(){
+
+ 
+// if (gomush.x < bushSprite.x + scaledWidth && //collision from left to right
+    // gomush.x + gomush > bush.x && // collision from right to left
+    //gomush.y < bush.y + scaledHeight && // collision from top to bottom
+    // gomush.y + gomush > bush.y // collision from bottom to top
+   // )
+   // console.log("collision bush");
+
+//if (gomush.x < petalSprite.x + scaledWidth && //collision from left to right
+   //  gomush.x + gomush > petal.x && // collision from right to left
+   //  gomush.y < petal.y + scaledHeight && // collision from top to bottom
+   //  gomush.y + gomush > petal.y // collision from bottom to top
+   // )
+   // console.log("collision petal");
+
+//}
+
+
 
 function update() {
     // console.log("Update");
@@ -185,10 +219,7 @@ function update() {
 
 
 }
-   // if (mushD  = maze1) {
-   //     (gomush -= speed)
-   // }
-
+  
 
 
 
@@ -198,8 +229,9 @@ const hightMaze = 500;
 const CELL_SIZE = 100;
 const WALL_COLOR = "#fabcc6";
 const PATH_COLOR = "#ff002b";
-const ROWS = 11
-const COLS = 5
+const ROWS = 5;
+const COLS = 11;
+
 
 let level = 1
 
@@ -210,9 +242,9 @@ let petalSprite = new Image();
 petalSprite.src = "img/flowerO.png";
 
 
-let bush = Array(COLS)
-  .fill()
-  .map(() => Array(ROWS).fill(new GameObject(bushSprite, 0, 0, CELL_SIZE, CELL_SIZE)));
+//let bush = Array(COLS)
+//  .fill()
+//  .map(() => Array(ROWS).fill(new GameObject(bushSprite, 0, 0, CELL_SIZE, CELL_SIZE)));
 
 
 let maze = Array(COLS)
@@ -220,9 +252,15 @@ let maze = Array(COLS)
   .map(() => Array(ROWS).fill(1));
 
 
-  let petal = Array(COLS)
-  .fill()
-  .map(() => Array(ROWS).fill(new GameObject(petalSprite, 0, 0, CELL_SIZE, CELL_SIZE)));
+  //let petal = Array(COLS)
+  //.fill()
+  //.map(() => Array(ROWS).fill(new GameObject(petalSprite, 0, 0, CELL_SIZE, CELL_SIZE)));
+
+  let bush = Array.from({ length: ROWS }, (_, r) =>
+    Array.from({ length: COLS }, (_, c) => new GameObject(bushSprite, c * CELL_SIZE, r * CELL_SIZE, CELL_SIZE, CELL_SIZE)));
+
+let petal = Array.from({ length: ROWS }, (_, r) =>
+    Array.from({ length: COLS }, (_, c) => new GameObject(petalSprite, c * CELL_SIZE, r * CELL_SIZE, CELL_SIZE, CELL_SIZE)));
 
 // 0 is path
 // 1 is wall
@@ -236,57 +274,113 @@ mazeLevel1 = [[0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1],
 
 mazeLevel2 = [[0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
               [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
-              [1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1],
-              [1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1],
+              [1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1],
+              [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1],
               [1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 2]]
 
 mazeLevel3 = [[0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1], 
               [1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1],
               [1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1],
-              [1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1],
+              [1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1],
               [1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 2]]
 
 maze = mazeLevel1
 
+
+
 function nextLevel()
 {
+
     if (level === 1)
     {
-        
+        gomush.x = 0;//pos 
+        gomush.y = 0;
         maze = mazeLevel2
         level = 2
         
     }
     if (level === 2)
-    {
+    {//maze 2 skipped?
+        gomush.x = 0;//pos reset 
+        gomush.y = 0;
         maze = mazeLevel3
         level = 3
     }
     if (level === 3)
     {
+        gomush.x = 0;//pos reset 
+        gomush.y = 0;
         // End of game
         return
     }
 
     // reset player position
+    
+     
+}
+
+
+
+let petalCollected = false; 
+
+
+function collision() {
+
+for (let r = 0; r < ROWS; r++) {
+  for (let c = 0; c < COLS; c++) {
+   // for (let r = 0; r < COLS; r++) {
+       // for (let c = 0; c < ROWS; c++) {
+
+            // Bush collision
+            //if (maze[c][r] === 1 && isColliding(gomush, bush[c][r]))
+              //  console.log("bush");
+             
+            if (maze[r][c] === 1 && isColliding(gomush, bush[r][c])) {
+                         console.log("bush");
+                         if (gamerInput.action === "Up") gomush.y += speed;
+                if (gamerInput.action === "Down") gomush.y -= speed;
+                if (gamerInput.action === "Left") gomush.x += speed;
+                if (gamerInput.action === "Right") gomush.x -= speed;
+                // maze colltion
+                }
+
+            // Petal collision
+            if (maze[r][c] === 2 && isColliding(gomush, petal[r][c])) {
+                console.log(" petal");
+                petalCollected = true; // petal sound effect 
+                 rainAudio.play();
+                   nextLevel();
+                }
+            }
+        }
+    }
+
+
+function isColliding(a, b) {
+    return (
+        a.x < b.x + b.width &&
+        a.x + a.width > b.x &&
+        a.y < b.y + b.height &&
+        a.y + a.height > b.y
+    );
 }
 
 function drawMaze() {
-  context.clearRect(0, 0, canvas.widthMaze, canvas.height);
+  //context.clearRect(0, 0, canvas.width, canvas.height);
 
-  for (let r = 0; r < COLS; r++) {
-    for (let c = 0; c < ROWS; c++) {
-      if (maze[r][c] === 1)
-      {
-        bush[r][c].x = c * CELL_SIZE
-        bush[r][c].y = r * CELL_SIZE
-        context.drawImage(bushSprite, bush[r][c].x, bush[r][c].y, bush[r][c].width, bush[r][c].height)
-      }
-      if (maze[r][c] == 2)
-      {
-        petal[r][c].x = c * CELL_SIZE
-        petal[r][c].y = r * CELL_SIZE
-        context.drawImage(petalSprite, petal[r][c].x, petal[r][c].y, petal[r][c].width, petal[r][c].height)
+     for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+            if (maze[r][c] === 1) {
+                
+                bush[r][c].x = c * CELL_SIZE;
+                bush[r][c].y = r * CELL_SIZE;
+                context.drawImage(bushSprite, bush[r][c].x, bush[r][c].y, bush[r][c].width, bush[r][c].height);
+            }
+            if (maze[r][c] === 2) {
+                petal[r][c].x = c * CELL_SIZE;
+                petal[r][c].y = r * CELL_SIZE;
+
+                context.drawImage(petalSprite, petal[r][c].x, petal[r][c].y, petal[r][c].width, petal[r][c].height);
       }
     }
   }
@@ -306,12 +400,12 @@ function gameloop() {
   
     //displayTitle();
   
-  
+ 
 
-      audio.play();
-      bool = true;
+      //audio.play();
+      //bool = true;
        
-
+  
 
 
      //   switch (event.keyCode) { 
@@ -327,6 +421,8 @@ function gameloop() {
        // } 
     update();
     draw();
+     collision();
+    //draw();
     drawMaze();
     window.requestAnimationFrame(gameloop);
 }
