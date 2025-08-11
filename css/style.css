@@ -23,12 +23,13 @@ font-size: 16px;
 }
 
 
-.button2{
+#musicToggleBtn{
 border:none;
 color :rgb(19, 71, 13);
-text-align: center;
-font-size: 16px;
+text-align: left;
+font-size: 30px;
 background-color: #a0ddae;
+font-family: Arial;
 
 }
 

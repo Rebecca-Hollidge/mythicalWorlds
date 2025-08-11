@@ -24,8 +24,9 @@ let speed = 4;
 
 var rainAudio = new Audio('img/raindrop.mp4');
 var backgroundAudio = new Audio('img/mushroom.mp4');
-backgroundAudio.play();
 
+
+const musicToggleBtn = document.getElementById('musicToggleBtn');
 
 let mushSprite = new Image();
 mushSprite.src = "img/mush.png";
@@ -37,6 +38,8 @@ let gomush = new GameObject(mushSprite, 0, 0, scaledWidth, scaledHeight);
 let groundSprite = new Image ();
 groundSprite.src = "img/ground.png";
 let goground = new GameObject(groundSprite, 0, 0,100, 100);
+
+
 
 let startSprite = new Image();
 startSprite.src = "img/start.png";
@@ -73,24 +76,19 @@ function draw() {
    //context.drawimage(tree, 0, 0, 200, 200);
 }
 
-//movement input
 
-function musicButton(){
 
-backgroundAudio.play = true;
-
-addEventListener(click)
-if (backgroundAudio. paused){
+//music button / loop
+musicToggleBtn.addEventListener('click', () => {
+  if (backgroundAudio.paused) {
     backgroundAudio.play();
-    button2.textContent = "Mute";
-}
-else {
+    backgroundAudio.loop = true; 
+    musicToggleBtn.textContent = "Mute";
+  } else {
     backgroundAudio.pause();
-    button2.textContent = "Play";
-}
-
-
-}
+    musicToggleBtn.textContent = "Play";
+  }
+});
 
 
 
@@ -147,10 +145,10 @@ function input(event) {
 }
 
 
-function setTimer() {
-  let totalTime = 15;
-  let timeRemaining = totalTime;
+let timeRemaining = 25;
 
+function setTimer() {
+  timeRemaining = 25;
   const interval = setInterval(() => {
     timeRemaining--;
     console.log("Time:", timeRemaining);
@@ -158,11 +156,33 @@ function setTimer() {
     if (timeRemaining <= 0) {
       clearInterval(interval);
       console.log("You lose");
-      // Handle loss
+      
+      
+      
     }
   }, 1000);
 }
 
+function drawTimer() {
+
+
+     let timerSprite = new Image();
+    timerSprite.src = "img/timerBox.png";
+    
+    context.drawImage(timerSprite, canvas.width - 110, -20, 110, 110);
+
+    context.font = "17px Arial ";
+    context.fillStyle = "black";
+    context.fillText("Time-" + timeRemaining,  canvas.width - 89, 45);
+    
+   // if (timeRemaining === 1){
+// let loseSprite = new Image();
+   // loseSprite.src = "img/gameover.png";
+    
+   // context.drawImage(loseSprite, canvas.width - 110, -20, 110, 110)
+   // }
+      
+}
 
 
 //colltion attempt 
@@ -193,7 +213,7 @@ function update() {
     if (gamerInput.action === "Up") {
         if (gomush.y < 0){
             console.log("player at top edge");
-            //.fillStyle = "red";
+          
 
         }
         else{
@@ -294,36 +314,50 @@ mazeLevel2 = [[0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1],
               [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1],
               [1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 2]]
 
-mazeLevel3 = [[0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1], 
-              [1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1],
-              [1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1],
-              [1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1],
+mazeLevel3 = [[0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1], 
+              [1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1],
+              [1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1],
+              [1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
               [1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 2]]
 
 maze = mazeLevel1
 
+function startGame() {
+    //level one pos/timer
+  level = 1;
+  gomush.x = 0;
+  gomush.y = 0;
+  maze = mazeLevel1;
+  setTimer();
+  window.requestAnimationFrame(gameloop);
+}
 
+startGame();
 
 function nextLevel()
 {
 
+   //timer wont start?
     if (level === 1)
     {
+        setTimer();
         gomush.x = 0;//pos 
         gomush.y = 0;
         maze = mazeLevel2
         level = 2
         
     }
-    if (level === 2)
+    else if (level === 2)
     {//maze 2 skipped?
+        setTimer();
         gomush.x = 0;//pos reset 
         gomush.y = 0;
         maze = mazeLevel3
         level = 3
     }
-    if (level === 3)
+   else if (level === 3)
     {
+        setTimer();
         gomush.x = 0;//pos reset 
         gomush.y = 0;
         // End of game
@@ -344,12 +378,7 @@ function collision() {
 
 for (let r = 0; r < ROWS; r++) {
   for (let c = 0; c < COLS; c++) {
-   // for (let r = 0; r < COLS; r++) {
-       // for (let c = 0; c < ROWS; c++) {
-
-            // Bush collision
-            //if (maze[c][r] === 1 && isColliding(gomush, bush[c][r]))
-              //  console.log("bush");
+   
              
             if (maze[r][c] === 1 && isColliding(gomush, bush[r][c])) {
                          console.log("bush");
@@ -411,28 +440,15 @@ function gameloop() {
     if(setupComplete == false){
         setupComplete = setup(setupComplete);
     }
-    */
-  // Audio();
+    */ 
+         update();
   
-    //displayTitle();
-  
-     //   switch (event.keyCode) { 
-
-              
-
-       //     case 77:  
-
-       //        bool = false; 
-
-      //          break; } 
-
-       // } 
-    update();
-    draw();
-     collision();
-    //draw();
-    drawMaze();
-    window.requestAnimationFrame(gameloop);
+        draw();
+         collision();
+         drawMaze();
+         drawTimer();
+         window.requestAnimationFrame(gameloop);
+   
 }
 
 window.addEventListener('keydown', input);
