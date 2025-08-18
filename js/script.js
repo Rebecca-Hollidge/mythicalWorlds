@@ -1,6 +1,17 @@
 const canvas = document.getElementById("the_canvas")
 const context = canvas.getContext("2d");
 
+let mouseX = 0
+let mouseY = 0
+
+const START = 0
+const GAMEPLAY = 1
+const WIN = 2
+const LOSE = 3
+
+let GameState = START
+
+let levelComplete = false
 
  const width = 128;
  const height = 100;
@@ -19,6 +30,14 @@ let otherFrameCount = 0;
 let currentDirection = 0;
 let speed = 4;
 
+let button1Width = 150; // Scale with image
+let button1Hight = 50;
+
+let button2Width = 150;// Scale with image
+let button2Hight = 50;
+
+let button3Width = 150; // Scale with image
+let button3Hight = 50;
 //let width = 1100 
 //let height = 500
 
@@ -27,6 +46,46 @@ var backgroundAudio = new Audio('img/mushroom.mp4');
 
 
 const musicToggleBtn = document.getElementById('musicToggleBtn');
+
+
+// WIN Lose screens
+let gameOverSprite = new Image();
+gameOverSprite.src = "img/gameOver.png";
+
+let youWinSprite = new Image();
+youWinSprite.src = "img/youWin.png";
+
+
+
+//BUTTON SPRITES
+let button1Sprite = new Image();
+button1Sprite.src = "img/button1.png";
+
+let button2Sprite = new Image();
+button2Sprite.src = "img/button2.png";
+
+let button3Sprite = new Image();
+button3Sprite.src = "img/button3.png";
+
+let startbutton = new GameObject(button1Sprite, 0, 0, button1Width, button1Hight)
+
+startbutton.x = (canvas.width / 2) - (button1Width / 2)
+startbutton.y = (canvas.height / 2) - (button1Hight / 2)
+
+let nextbutton = new GameObject(button2Sprite, 0, 0, button2Width, button2Hight)
+
+nextbutton.x = (canvas.width / 2) - (button2Width / 2)
+nextbutton.y = (canvas.height / 2) - (button2Hight / 2)
+
+let playAgainButton = new GameObject(button3Sprite, 0, 0, button3Width, button3Hight)
+
+playAgainButton.x = (canvas.width / 2) - (button3Width / 2)
+playAgainButton.y = (canvas.height / 2) - (button3Hight / 2)
+
+//let loseButton = new GameObject(buttonSprite, 0, 0, buttonWidth, buttonHight)
+
+//loseButton.x = (canvas.width / 2) - (buttonWidth / 2)
+//loseButton.y = (canvas.height / 2) - (buttonHight / 2)
 
 let mushSprite = new Image();
 mushSprite.src = "img/mush.png";
@@ -69,8 +128,36 @@ function draw() {
    //context.drawImage(goground.spritesheet, goground.x, goground.y, goground.width, goground.height)
 
    //context.drawImage(gomush.spritesheet, 1, 1, 100, 100)
-   context.drawImage(groundSprite, 0, 0, canvas.width, canvas.height)
-   drawFrame(gomush.spritesheet, currentFrame, 0, gomush.x, gomush.y)
+   if (GameState === START)
+   {
+    
+    context.drawImage(startSprite, 0, 0, canvas.width, canvas.height)
+    context.drawImage( startbutton.spritesheet, startbutton.x, startbutton.y,startbutton.width, startbutton.height  );
+   }
+   if (GameState === GAMEPLAY)
+   {
+    context.drawImage(groundSprite, 0, 0, canvas.width, canvas.height)
+    drawFrame(gomush.spritesheet, currentFrame, 0, gomush.x, gomush.y)
+    drawMaze();
+    drawTimer();
+    if (levelComplete)
+    {
+        context.drawImage(startSprite, 0, 0, canvas.width, canvas.height)
+       context.drawImage(nextbutton.spritesheet, nextbutton.x,  nextbutton.y, nextbutton.width, nextbutton.height);
+    }
+   }
+  if (GameState === WIN) {
+    context.drawImage(youWinSprite, 0, 0, canvas.width, canvas.height);
+    context.drawImage(playAgainButton.spritesheet, playAgainButton.x, playAgainButton.y, playAgainButton.width, playAgainButton.height);
+   // startGame();
+   // GameState = GAMEPLAY;
+}
+if (GameState === LOSE) {
+    context.drawImage(gameOverSprite, 0, 0, canvas.width, canvas.height);
+    context.drawImage(playAgainButton.spritesheet, playAgainButton.x, playAgainButton.y, playAgainButton.width, playAgainButton.height);
+   // startGame();
+    //GameState = GAMEPLAY;
+}
 //context.drawImage(gomaze1.spritesheet, gomaze1.x, goground.y, gomaze1.width, gomaze1.height)
     //context.drawImage(tree,400,400,0,0);
    //context.drawimage(tree, 0, 0, 200, 200);
@@ -89,6 +176,81 @@ musicToggleBtn.addEventListener('click', () => {
     musicToggleBtn.textContent = "Play";
   }
 });
+
+function getMousePosition(canvas, event) 
+{
+    let rect = canvas.getBoundingClientRect();
+    mouseX = event.clientX - rect.left;
+    mouseY = event.clientY - rect.top;
+    console.log("Coordinate x: " + mouseX,
+                "Coordinate y: " + mouseY);
+}
+
+canvas.addEventListener("mousedown", function (e)
+{
+    getMousePosition(canvas, e)
+    buttonPress()
+})
+
+function buttonPress()
+{
+    if (GameState === START)
+    {
+        if (mouseX > startbutton.x && mouseX < startbutton.x + button1Width)
+        {
+            if (mouseY > startbutton.y && mouseY < startbutton.y + button1Hight)
+            {
+                GameState = GAMEPLAY
+                startGame()
+            }
+        }
+    }
+        
+    if (GameState === WIN)
+    {
+        if (mouseX > playAgainButton.x && mouseX < playAgainButton.x + button3Width)
+        {
+            if (mouseY > playAgainButton.y && mouseY < playAgainButton.y + button3Hight)
+            {
+               GameState = GAMEPLAY
+               startGame()
+            }
+        }
+    }
+
+    if (GameState === LOSE)
+    {
+       if (mouseX > playAgainButton.x && mouseX < playAgainButton.x + button3Width)
+        {
+            if (mouseY > playAgainButton.y && mouseY < playAgainButton.y + button3Hight)
+            {
+                GameState = GAMEPLAY
+                startGame()
+            }
+        }
+    }
+
+    if (GameState === GAMEPLAY)
+    {
+        if (mouseX > nextbutton.x && mouseX < nextbutton.x + button2Width)
+        {
+            if (mouseY > nextbutton.y && mouseY < nextbutton.y + button2Hight)
+            {
+                levelComplete = false
+
+                if (level < 3)
+                {
+                    nextLevel()
+                }
+                else
+                {
+                    GameState = WIN
+                }
+          
+            }
+        }
+    }
+}
 
 
 
@@ -129,38 +291,43 @@ function input(event) {
             case 40: // Down Arrow
                 gamerInput = new GamerInput("Down");
                 break; //Down key
-            case 32:
-                speed = 6;
-                break;
+          //  case 32:
+              //  speed = 4;
+             //   break;
             default:
                 gamerInput = new GamerInput("None"); //No Input
         }
 
-    } else {
+   } else {
         gamerInput = new GamerInput("None");
-        speed = 3;
-        
-    }
+      
+                speed = 4;  
+            
+  }
 
 }
 
 
 let timeRemaining = 25;
 
-function setTimer() {
-  timeRemaining = 25;
-  const interval = setInterval(() => {
-    timeRemaining--;
-    console.log("Time:", timeRemaining);
 
-    if (timeRemaining <= 0) {
-      clearInterval(interval);
-      console.log("You lose");
-      
-      
-      
-    }
-  }, 1000);
+let timerInterval;
+
+function setTimer() {
+    if (GameState !== GAMEPLAY) return;
+
+    clearInterval(timerInterval); // stop previous
+    timeRemaining = 25;
+
+    timerInterval = setInterval(() => {
+        timeRemaining--;
+        if (timeRemaining <= 0) {
+            clearInterval(timerInterval);
+           // if gameplafalse?
+            GameState = LOSE;
+            
+        }
+    }, 1000);
 }
 
 function drawTimer() {
@@ -206,6 +373,25 @@ function drawTimer() {
 //}
 
 
+//let manager = nipplejs.create({
+    //color: 'pink',
+    //zone: document.querySelector('.joystickDiv')
+//});
+
+//manager.on('start', function (evt, nipple) {
+    //nipple.on('start move end dir plain', function (evt) {
+//    nipple.on('dir:left', function (evt, data) {
+  //          gamerInput.action = "Left";
+  //  });
+  //  nipple.on('dir:right', function (evt, data) {
+ //           gamerInput.action = "Right";
+  //  });
+//}).on('end', function (evt, nipple) {
+  //  nipple.off
+  //  {
+   //         gamerInput.action = "None";
+   // };
+//});
 
 function update() {
     // console.log("Update");
@@ -269,7 +455,7 @@ const ROWS = 5;
 const COLS = 11;
 
 
-let level = 1
+let level = 0
 
 let bushSprite = new Image ();
 bushSprite.src = "img/bush.png";
@@ -316,19 +502,19 @@ mazeLevel2 = [[0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 
 mazeLevel3 = [[0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1], 
               [1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1],
-              [1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1],
-              [1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+              [1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1],
+              [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
               [1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 2]]
 
 maze = mazeLevel1
 
 function startGame() {
     //level one pos/timer
-  level = 1;
+  level = 0;
   gomush.x = 0;
   gomush.y = 0;
   maze = mazeLevel1;
-  setTimer();
+  //setTimer();
   window.requestAnimationFrame(gameloop);
 }
 
@@ -336,16 +522,29 @@ startGame();
 
 function nextLevel()
 {
-
-   //timer wont start?
-    if (level === 1)
+    if (GameState != GAMEPLAY)
     {
+        return
+    }
+//timer wont start?
+    levelComplete = false;
+    if (level === 0)
+    {
+         setTimer();
+        console.log("Start")
+        level = 1
+        return
+    }
+    else if (level === 1)
+    {
+        console.log("help")
         setTimer();
+        console.log("Level 1 " + level)
         gomush.x = 0;//pos 
         gomush.y = 0;
         maze = mazeLevel2
         level = 2
-        
+        return
     }
     else if (level === 2)
     {//maze 2 skipped?
@@ -354,22 +553,46 @@ function nextLevel()
         gomush.y = 0;
         maze = mazeLevel3
         level = 3
+        console.log("Level 2 " + level)
+        return
     }
    else if (level === 3)
     {
         setTimer();
         gomush.x = 0;//pos reset 
         gomush.y = 0;
+        console.log("Level 3 " + level)
         // End of game
         return
     }
-
     // reset player position
     
      
 }
 
+//function levelButtonStart(){
 
+//let startSprite = new Image();
+//    startSprite.src = "img/start.png";
+    
+//    context.drawImage(startSprite, canvas.width - 110, -20, 110, 110);
+
+//button2.addEventListener('click');
+//    context.font = "17px Arial ";
+//    context.fillStyle = "black";
+//    context.fillText("Start game");
+
+//}
+
+
+//function levelButtonNext(){
+
+//    button2.addEventListener('click');
+//    context.font = "17px Arial ";
+ //   context.fillStyle = "black";
+//    context.fillText("Next Level");
+
+//}
 
 let petalCollected = false; 
 
@@ -393,8 +616,9 @@ for (let r = 0; r < ROWS; r++) {
             if (maze[r][c] === 2 && isColliding(gomush, petal[r][c])) {
                 console.log(" petal");
                 petalCollected = true; // petal sound effect 
-                 rainAudio.play();
-                   nextLevel();
+                if (!levelComplete) 
+                {rainAudio.play();}
+                   levelComplete = true
                 }
             }
         }
@@ -430,7 +654,6 @@ function drawMaze() {
     }
   }
 }
-drawMaze();
   
 
 function gameloop() {
@@ -441,12 +664,13 @@ function gameloop() {
         setupComplete = setup(setupComplete);
     }
     */ 
-         update();
+        if (!levelComplete)
+        {
+            update();
+        }
   
         draw();
          collision();
-         drawMaze();
-         drawTimer();
          window.requestAnimationFrame(gameloop);
    
 }
