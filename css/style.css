@@ -13,15 +13,47 @@ canvas {
 }
 
 
-.button1{
+.button{
 border:none;
-color :white;
-text-align: left;
+color :rgb(10, 98, 25);
+text-align: center;
 font-size: 16px;
-
+text-decoration-color: black;
     
 }
+.button:hover {
+background-color: #595158;
+}
 
+.button:active {
+box-shadow: 0 5px #3D3D3D;
+transform: translateY(5px);
+}
+
+.pressed{
+box-shadow: 0 5px #3D3D3D;
+transform: translateY(5px);    
+}
+
+.red {
+color: #ff0000;
+}
+
+.green {
+color: #00FF00;
+}
+
+.blue {
+color: #0000FF;
+}
+
+.yellow {
+color: #ff5e00;
+}
+
+.round {
+border-radius: 50%;
+}
 
 
 #musicToggleBtn{

@@ -55,7 +55,8 @@ gameOverSprite.src = "img/gameOver.png";
 let youWinSprite = new Image();
 youWinSprite.src = "img/youWin.png";
 
-
+let leaderSprite = new Image();
+leaderSprite.src = "img/leaderBoard.png";
 
 //BUTTON SPRITES
 let button1Sprite = new Image();
@@ -132,6 +133,7 @@ function draw() {
    {
     
     context.drawImage(startSprite, 0, 0, canvas.width, canvas.height)
+    context.drawImage(leaderSprite, 0, 0, canvas.width/4, canvas.height/4);
     context.drawImage( startbutton.spritesheet, startbutton.x, startbutton.y,startbutton.width, startbutton.height  );
    }
    if (GameState === GAMEPLAY)
@@ -148,12 +150,14 @@ function draw() {
    }
   if (GameState === WIN) {
     context.drawImage(youWinSprite, 0, 0, canvas.width, canvas.height);
+    context.drawImage(leaderSprite, 0, 0, canvas.width/4, canvas.height/4);
     context.drawImage(playAgainButton.spritesheet, playAgainButton.x, playAgainButton.y, playAgainButton.width, playAgainButton.height);
    // startGame();
    // GameState = GAMEPLAY;
 }
 if (GameState === LOSE) {
     context.drawImage(gameOverSprite, 0, 0, canvas.width, canvas.height);
+    context.drawImage(leaderSprite, 0, 0, canvas.width/4, canvas.height/4);
     context.drawImage(playAgainButton.spritesheet, playAgainButton.x, playAgainButton.y, playAgainButton.width, playAgainButton.height);
    // startGame();
     //GameState = GAMEPLAY;
@@ -191,6 +195,13 @@ canvas.addEventListener("mousedown", function (e)
     getMousePosition(canvas, e)
     buttonPress()
 })
+
+//button1Hight.addEventListener('click', () => {
+
+//if (blueButton)
+
+
+//})
 
 function buttonPress()
 {
@@ -230,7 +241,7 @@ function buttonPress()
         }
     }
 
-    if (GameState === GAMEPLAY)
+    if (GameState === GAMEPLAY && levelComplete)
     {
         if (mouseX > nextbutton.x && mouseX < nextbutton.x + button2Width)
         {
@@ -270,6 +281,28 @@ function GamerInput(input) {
 // Default GamerInput is set to None
 let gamerInput = new GamerInput("None"); //No Input
  
+
+function clickableDpadReleased() {
+    console.log(event);
+}
+function clickDpadYellow(){
+    console.log(event);
+
+}
+function clickDpadBlue(){
+    console.log(event);
+}
+function clickDpadRed(){
+    console.log(event);
+}
+function clickDpadGreen(){
+    console.log(event);
+}
+let yellowButton = document.getElementsByClassName("yellow")[0];
+let blueButton = document.getElementsByClassName("blue")[0];
+let redButton = document.getElementsByClassName("red")[0];
+let greenButton = document.getElementsByClassName("green")[0];
+
 function input(event) {
     // Take Input from the Player
     // console.log("Input");
@@ -301,10 +334,39 @@ function input(event) {
    } else {
         gamerInput = new GamerInput("None");
       
-                speed = 4;  
+                speed = 5;  
             
-  }
+   }
+     if (event.type === "click") {
+        switch (event.key) {
+            case "blueButton": // Left Arrow // blue
+                //gamerInput = new GamerInput("Left");
+                blueButton.classList.add("left");
+                break; //Left key
+            case "yellowButton": // Up Arrow // yellow
+                yellowButton.classList.add("up");
+                //gamerInput = new GamerInput("Up");
+                break; //Up key
+            case "redButton": // Right Arrow // red
+                redButton.classList.add("right");    
+                //gamerInput = new GamerInput("Right");
+                break; //Right key
+            case "greenButtom": // Down Arrow // green
+                greenButton.classList.add("down");
+                //gamerInput = new GamerInput("Down");
+                break; //Down key
+            default:
+                //gamerInput = new GamerInput("None"); //No Input
+        }
+    } else {
+        //gamerInput = new GamerInput("None");
+        redButton.classList.remove("right");
+        blueButton.classList.remove("left");
+        yellowButton.classList.remove("up");
+        greenButton.classList.remove("down");
 
+    }
+    speed = 5;
 }
 
 
@@ -320,7 +382,10 @@ function setTimer() {
     timeRemaining = 25;
 
     timerInterval = setInterval(() => {
-        timeRemaining--;
+        if (!levelComplete)
+        {
+            timeRemaining--;
+        }
         if (timeRemaining <= 0) {
             clearInterval(timerInterval);
            // if gameplafalse?
@@ -373,25 +438,6 @@ function drawTimer() {
 //}
 
 
-//let manager = nipplejs.create({
-    //color: 'pink',
-    //zone: document.querySelector('.joystickDiv')
-//});
-
-//manager.on('start', function (evt, nipple) {
-    //nipple.on('start move end dir plain', function (evt) {
-//    nipple.on('dir:left', function (evt, data) {
-  //          gamerInput.action = "Left";
-  //  });
-  //  nipple.on('dir:right', function (evt, data) {
- //           gamerInput.action = "Right";
-  //  });
-//}).on('end', function (evt, nipple) {
-  //  nipple.off
-  //  {
-   //         gamerInput.action = "None";
-   // };
-//});
 
 function update() {
     // console.log("Update");
@@ -399,7 +445,6 @@ function update() {
     if (gamerInput.action === "Up") {
         if (gomush.y < 0){
             console.log("player at top edge");
-          
 
         }
         else{
@@ -514,14 +559,14 @@ function startGame() {
   gomush.x = 0;
   gomush.y = 0;
   maze = mazeLevel1;
-  //setTimer();
-  window.requestAnimationFrame(gameloop);
+  setTimer();
 }
 
 startGame();
 
 function nextLevel()
 {
+    console.log(speed)
     if (GameState != GAMEPLAY)
     {
         return
@@ -596,7 +641,6 @@ function nextLevel()
 
 let petalCollected = false; 
 
-
 function collision() {
 
 for (let r = 0; r < ROWS; r++) {
@@ -619,6 +663,10 @@ for (let r = 0; r < ROWS; r++) {
                 if (!levelComplete) 
                 {rainAudio.play();}
                    levelComplete = true
+                   if (level === 3)
+                   {
+                    GameState = WIN
+                   }
                 }
             }
         }
@@ -679,3 +727,12 @@ window.addEventListener('keydown', input);
 // disable the second event listener if you want continuous movement
 window.addEventListener('keyup', input);
 window.requestAnimationFrame(gameloop);
+
+
+// When level complete -> score += 100 * timeRemaining
+// var hiScore
+// if score > hiScore {hiScore = score, display "new hi score"}
+// newHiScore sprite -> says "new hi score"
+// timer for new hi score -> draw if timer > 0
+// Reset score at end of game, but not hiScore
+
