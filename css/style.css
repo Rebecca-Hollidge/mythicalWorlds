@@ -22,16 +22,16 @@ text-decoration-color: black;
     
 }
 .button:hover {
-background-color: #595158;
+background-color: #f0aae7;
 }
 
 .button:active {
-box-shadow: 0 5px #3D3D3D;
+box-shadow: 0 5px #307a35;
 transform: translateY(5px);
 }
 
 .pressed{
-box-shadow: 0 5px #3D3D3D;
+box-shadow: 0 5px #86eb9f;
 transform: translateY(5px);    
 }
 
@@ -77,3 +77,15 @@ font-family: Arial;
 color: #fabcc6;
 }
 
+div#modal{
+    display: none;
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}

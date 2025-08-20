@@ -39,10 +39,14 @@ let button2Hight = 50;
 let button3Width = 150; // Scale with image
 let button3Hight = 50;
 //let width = 1100 
-//let height = 500
+//let height = 500const 
+const username = localStorage.getItem('username');
+const score = localStorage.getItem('score');
 
 var rainAudio = new Audio('img/raindrop.mp4');
 var backgroundAudio = new Audio('img/mushroom.mp4');
+var winAudio = new Audio ("img/winsong.mp4");
+var gameOverAudio = new Audio ("img/gameOverSong.mp4")
 
 
 const musicToggleBtn = document.getElementById('musicToggleBtn');
@@ -121,6 +125,13 @@ function drawFrame(image, frameX, frameY, canvasX, canvasY) {
     // context.drawImage(testImg, 0,0);
 }
 
+
+
+
+let winPlayed = false;
+let gameOverPlayed = false;
+
+
 function draw() {
     //console.log("Draw is called!");
     context.clearRect(0,0, canvas.width, canvas.height);
@@ -133,7 +144,8 @@ function draw() {
    {
     
     context.drawImage(startSprite, 0, 0, canvas.width, canvas.height)
-    context.drawImage(leaderSprite, 0, 0, canvas.width/4, canvas.height/4);
+    //context.drawImage(leaderSprite, 0, 0, canvas.width , canvas.height);
+    context.drawImage(leaderSprite, 0, 0, 200, 400);
     context.drawImage( startbutton.spritesheet, startbutton.x, startbutton.y,startbutton.width, startbutton.height  );
    }
    if (GameState === GAMEPLAY)
@@ -150,15 +162,25 @@ function draw() {
    }
   if (GameState === WIN) {
     context.drawImage(youWinSprite, 0, 0, canvas.width, canvas.height);
-    context.drawImage(leaderSprite, 0, 0, canvas.width/4, canvas.height/4);
+   // context.drawImage(leaderSprite, 0, 0, canvas.width/5, canvas.height/5);
+   context.drawImage(leaderSprite, 0, 0, 200, 400);
     context.drawImage(playAgainButton.spritesheet, playAgainButton.x, playAgainButton.y, playAgainButton.width, playAgainButton.height);
+    if (!winPlayed) {
+      winAudio.play();
+      winPlayed = true;
+    }
    // startGame();
    // GameState = GAMEPLAY;
 }
 if (GameState === LOSE) {
     context.drawImage(gameOverSprite, 0, 0, canvas.width, canvas.height);
-    context.drawImage(leaderSprite, 0, 0, canvas.width/4, canvas.height/4);
+   // context.drawImage(leaderSprite, 0, 0, canvas.width/5, canvas.height/5);
+   context.drawImage(leaderSprite, 0, 0, 200, 400);
     context.drawImage(playAgainButton.spritesheet, playAgainButton.x, playAgainButton.y, playAgainButton.width, playAgainButton.height);
+   if (!gameOverPlayed) {
+      gameOverAudio.play();
+      gameOverPlayed = true;
+    }
    // startGame();
     //GameState = GAMEPLAY;
 }
@@ -560,6 +582,9 @@ function startGame() {
   gomush.y = 0;
   maze = mazeLevel1;
   setTimer();
+
+   winPlayed = false;
+  gameOverPlayed = false;
 }
 
 startGame();
@@ -735,4 +760,4 @@ window.requestAnimationFrame(gameloop);
 // newHiScore sprite -> says "new hi score"
 // timer for new hi score -> draw if timer > 0
 // Reset score at end of game, but not hiScore
-
+// local storage . iten 
