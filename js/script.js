@@ -40,8 +40,19 @@ let button3Width = 150; // Scale with image
 let button3Hight = 50;
 //let width = 1100 
 //let height = 500const 
-const username = localStorage.getItem('username');
+//const username = localStorage.getItem('username');
 const score = localStorage.getItem('score');
+let hiScore = localStorage.getItem('hiScore') || 0;
+// let score = 0;
+
+// player scroe list
+    let Player1 = 0;
+     let Player2 = 0;
+     let Player3 = 0;
+     
+     let Player4 = 0;
+     let Player5 = 0;
+
 
 var rainAudio = new Audio('img/raindrop.mp4');
 var backgroundAudio = new Audio('img/mushroom.mp4');
@@ -134,6 +145,7 @@ let gameOverPlayed = false;
 
 function draw() {
     //console.log("Draw is called!");
+     
     context.clearRect(0,0, canvas.width, canvas.height);
    
  //context.drawImage(gostart.spritesheet, gostart.x, gostart.y, gostart.width, gostart.height)
@@ -145,8 +157,10 @@ function draw() {
     
     context.drawImage(startSprite, 0, 0, canvas.width, canvas.height)
     //context.drawImage(leaderSprite, 0, 0, canvas.width , canvas.height);
+   // drawLeadar();
     context.drawImage(leaderSprite, 0, 0, 200, 400);
     context.drawImage( startbutton.spritesheet, startbutton.x, startbutton.y,startbutton.width, startbutton.height  );
+    drawLeadar();
    }
    if (GameState === GAMEPLAY)
    {
@@ -163,8 +177,10 @@ function draw() {
   if (GameState === WIN) {
     context.drawImage(youWinSprite, 0, 0, canvas.width, canvas.height);
    // context.drawImage(leaderSprite, 0, 0, canvas.width/5, canvas.height/5);
+  // drawLeadar();
    context.drawImage(leaderSprite, 0, 0, 200, 400);
     context.drawImage(playAgainButton.spritesheet, playAgainButton.x, playAgainButton.y, playAgainButton.width, playAgainButton.height);
+    drawLeadar();
     if (!winPlayed) {
       winAudio.play();
       winPlayed = true;
@@ -175,6 +191,7 @@ function draw() {
 if (GameState === LOSE) {
     context.drawImage(gameOverSprite, 0, 0, canvas.width, canvas.height);
    // context.drawImage(leaderSprite, 0, 0, canvas.width/5, canvas.height/5);
+   //drawLeadar();
    context.drawImage(leaderSprite, 0, 0, 200, 400);
     context.drawImage(playAgainButton.spritesheet, playAgainButton.x, playAgainButton.y, playAgainButton.width, playAgainButton.height);
    if (!gameOverPlayed) {
@@ -325,6 +342,17 @@ let blueButton = document.getElementsByClassName("blue")[0];
 let redButton = document.getElementsByClassName("red")[0];
 let greenButton = document.getElementsByClassName("green")[0];
 
+yellowButton.addEventListener("mousedown", () => gamerInput = new GamerInput("Up"));
+yellowButton.addEventListener("mouseup", () => gamerInput = new GamerInput("None"));
+
+blueButton.addEventListener("mousedown", () => gamerInput = new GamerInput("Left"));
+blueButton.addEventListener("mouseup", () => gamerInput = new GamerInput("None"));
+
+redButton.addEventListener("mousedown", () => gamerInput = new GamerInput("Right"));
+redButton.addEventListener("mouseup", () => gamerInput = new GamerInput("None"));
+
+greenButton.addEventListener("mousedown", () => gamerInput = new GamerInput("Down"));
+greenButton.addEventListener("mouseup", () => gamerInput = new GamerInput("None"));
 function input(event) {
     // Take Input from the Player
     // console.log("Input");
@@ -509,6 +537,47 @@ function update() {
 
 }
   
+// When level complete -> score += 100 * timeRemaining
+// var hiScore
+// if score > hiScore {hiScore = score, display "new hi score"}
+// newHiScore sprite -> says "new hi score"
+// timer for new hi score -> draw if timer > 0
+// Reset score at end of game, but not hiScore
+// local storage . iten 
+
+    
+ 
+
+function leader(){
+   
+   
+
+    function completeLevel() {
+    score += 100 * timeRemaining;
+    if (score > hiScore) {
+        hiScore = score;
+        localStorage.setItem('hiScore', hiScore);
+        console.log("new scroe");
+    }
+
+   
+
+}
+   // context.font = "17px Arial ";
+   // context.fillStyle = "green ";
+    //context.fillText(" " + hiscore,  canvas.width);
+
+
+}
+function drawLeadar(){
+    leader();
+
+     context.font = "17px Arial ";
+    context.fillStyle = "black ";
+     context.fillText("Score: " + score, canvas.width-  1050, 250);
+    context.fillText("High Score: " + hiScore,  canvas.width-  1050, 200);
+
+}
 
 
 
@@ -591,21 +660,22 @@ startGame();
 
 function nextLevel()
 {
+   // completeLevel();
     console.log(speed)
     if (GameState != GAMEPLAY)
     {
         return
     }
-//timer wont start?
+        //timer wont start?
     levelComplete = false;
-    if (level === 0)
-    {
+           if (level === 0) {
          setTimer();
-        console.log("Start")
-        level = 1
-        return
-    }
-    else if (level === 1)
+         console.log("Start")
+         level = 1
+          return
+  }
+   else
+         if (level === 1)
     {
         console.log("help")
         setTimer();
@@ -754,10 +824,4 @@ window.addEventListener('keyup', input);
 window.requestAnimationFrame(gameloop);
 
 
-// When level complete -> score += 100 * timeRemaining
-// var hiScore
-// if score > hiScore {hiScore = score, display "new hi score"}
-// newHiScore sprite -> says "new hi score"
-// timer for new hi score -> draw if timer > 0
-// Reset score at end of game, but not hiScore
-// local storage . iten 
+
