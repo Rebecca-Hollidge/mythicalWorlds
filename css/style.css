@@ -66,11 +66,18 @@ font-family: Arial;
 
 }
 
-.button_text {
-   font-family: "Roboto Mono";
-   font-weight:bold;
-   font-size: 22px;
-   
+.button2 {
+border: 2px solid black;                 
+  outline: 2px solid rgb(28, 95, 11); 
+color :rgb(19, 71, 13);
+text-align: left;
+font-size: 30px;
+
+background-color: #a0ddae;
+font-family: Arial;
+padding: 10px;
+ border-radius: 6px;
+   text-decoration-color: black;
 }
 
 .hover {
@@ -88,4 +95,11 @@ div#modal{
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+.text-box {
+  background-color: pink;
+  padding: 10px 15px;
+  width: 40%;
+  height : 480px;
+  display: inline-block;
 }

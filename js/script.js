@@ -1,3 +1,5 @@
+
+
 const canvas = document.getElementById("the_canvas")
 const context = canvas.getContext("2d");
 
@@ -41,18 +43,47 @@ let button3Hight = 50;
 //let width = 1100 
 //let height = 500const 
 //const username = localStorage.getItem('username');
-const score = localStorage.getItem('score');
+let score = 0;
 let hiScore = localStorage.getItem('hiScore') || 0;
 // let score = 0;
+
+let username = localStorage.getItem('username');
+
+
+//if (!username) {
+   // username = prompt("Enter your name:"); // ask for username if not set
+   //     if (username) {
+  //      localStorage.setItem("username", username);
+  //  } else {
+       // username = "Player"; // default if user cancels
+  //  }
+//}
+    
+
+
+function addName() {
+    let header = document.getElementById("main-header");
+    header.innerHTML = "Hello " + username;
+     context.fillText("Player: " + username, 35, 452);
+}
+
+//localStorage.setItem("username", username);
+// key - value pair
+//const username = localStorage.getItem('username', username);
+console.log(username);
+
+
+//addName();
 
 // player scroe list
     let Player1 = 0;
      let Player2 = 0;
      let Player3 = 0;
-     
      let Player4 = 0;
      let Player5 = 0;
 
+
+let canUpScroe = false
 
 var rainAudio = new Audio('img/raindrop.mp4');
 var backgroundAudio = new Audio('img/mushroom.mp4');
@@ -116,6 +147,7 @@ let goground = new GameObject(groundSprite, 0, 0,100, 100);
 
 
 
+
 let startSprite = new Image();
 startSprite.src = "img/start.png";
 
@@ -145,9 +177,20 @@ let gameOverPlayed = false;
 
 function draw() {
     //console.log("Draw is called!");
-     
+     //addName();
     context.clearRect(0,0, canvas.width, canvas.height);
    
+
+    let nameBoxSprite = new Image ();
+    nameBoxSprite.src = "img/nameBox.png";
+  let gonameBox = new GameObject(nameBoxSprite, 0, 0,100, 100);
+
+    context.font = "10px Arial";
+    context.fillStyle = "black";
+    context.fillText("Player: " + username, 35, 452);
+    context.fillText("Score: " + score, 20, 30);
+    context.fillText("High Score: " + hiScore, 20, 60);
+    
  //context.drawImage(gostart.spritesheet, gostart.x, gostart.y, gostart.width, gostart.height)
    //context.drawImage(goground.spritesheet, goground.x, goground.y, goground.width, goground.height)
 
@@ -159,7 +202,11 @@ function draw() {
     //context.drawImage(leaderSprite, 0, 0, canvas.width , canvas.height);
    // drawLeadar();
     context.drawImage(leaderSprite, 0, 0, 200, 400);
+       context.font = "50px Arial";
+       context.color = "pink ";
+   context.fillText("Let's play " + username, canvas.width-  700, 80);
     context.drawImage( startbutton.spritesheet, startbutton.x, startbutton.y,startbutton.width, startbutton.height  );
+    
     drawLeadar();
    }
    if (GameState === GAMEPLAY)
@@ -168,6 +215,13 @@ function draw() {
     drawFrame(gomush.spritesheet, currentFrame, 0, gomush.x, gomush.y)
     drawMaze();
     drawTimer();
+    //Draw name 
+    context.drawImage(nameBoxSprite, 10, 400, 110, 110);
+    // context.drawImage(timerSprite, canvas.width - 0, -100, 110, 110);
+     context.font = "12px Arial";
+    context.fillText("" + username, 35, 452);
+    context.fillText("Score: " + score, 32, 470);
+   
     if (levelComplete)
     {
         context.drawImage(startSprite, 0, 0, canvas.width, canvas.height)
@@ -179,6 +233,8 @@ function draw() {
    // context.drawImage(leaderSprite, 0, 0, canvas.width/5, canvas.height/5);
   // drawLeadar();
    context.drawImage(leaderSprite, 0, 0, 200, 400);
+      context.font = "20px Arial";
+   context.fillText("" + username, canvas.width-  1050, 150);
     context.drawImage(playAgainButton.spritesheet, playAgainButton.x, playAgainButton.y, playAgainButton.width, playAgainButton.height);
     drawLeadar();
     if (!winPlayed) {
@@ -193,6 +249,9 @@ if (GameState === LOSE) {
    // context.drawImage(leaderSprite, 0, 0, canvas.width/5, canvas.height/5);
    //drawLeadar();
    context.drawImage(leaderSprite, 0, 0, 200, 400);
+    context.font = "20px Arial";
+   context.fillText("" + username, canvas.width-  1050, 150);
+    drawLeadar();
     context.drawImage(playAgainButton.spritesheet, playAgainButton.x, playAgainButton.y, playAgainButton.width, playAgainButton.height);
    if (!gameOverPlayed) {
       gameOverAudio.play();
@@ -452,7 +511,7 @@ function drawTimer() {
     timerSprite.src = "img/timerBox.png";
     
     context.drawImage(timerSprite, canvas.width - 110, -20, 110, 110);
-
+   // context.drawImage(timerSprite, canvas.width - 1110, -1120, 110, 110);
     context.font = "17px Arial ";
     context.fillStyle = "black";
     context.fillText("Time-" + timeRemaining,  canvas.width - 89, 45);
@@ -549,20 +608,10 @@ function update() {
  
 
 function leader(){
-   
-   
-
-    function completeLevel() {
-    score += 100 * timeRemaining;
-    if (score > hiScore) {
-        hiScore = score;
-        localStorage.setItem('hiScore', hiScore);
-        console.log("new scroe");
-    }
-
-   
-
-}
+   if (levelComplete)
+   {
+    
+   }
    // context.font = "17px Arial ";
    // context.fillStyle = "green ";
     //context.fillText(" " + hiscore,  canvas.width);
@@ -572,7 +621,7 @@ function leader(){
 function drawLeadar(){
     leader();
 
-     context.font = "17px Arial ";
+     context.font = "15px Arial ";
     context.fillStyle = "black ";
      context.fillText("Score: " + score, canvas.width-  1050, 250);
     context.fillText("High Score: " + hiScore,  canvas.width-  1050, 200);
@@ -651,6 +700,7 @@ function startGame() {
   gomush.y = 0;
   maze = mazeLevel1;
   setTimer();
+  nextLevel()
 
    winPlayed = false;
   gameOverPlayed = false;
@@ -670,6 +720,7 @@ function nextLevel()
     levelComplete = false;
            if (level === 0) {
          setTimer();
+         score = 0;
          console.log("Start")
          level = 1
           return
@@ -686,7 +737,7 @@ function nextLevel()
         level = 2
         return
     }
-    else if (level === 2)
+        else if (level === 2)
     {//maze 2 skipped?
         setTimer();
         gomush.x = 0;//pos reset 
@@ -696,7 +747,7 @@ function nextLevel()
         console.log("Level 2 " + level)
         return
     }
-   else if (level === 3)
+        else if (level === 3)
     {
         setTimer();
         gomush.x = 0;//pos reset 
@@ -758,6 +809,15 @@ for (let r = 0; r < ROWS; r++) {
                 if (!levelComplete) 
                 {rainAudio.play();}
                    levelComplete = true
+                   score += 100 * timeRemaining;
+                   gomush.x = 0
+                    gomush.y = 0
+                   console.log(score)
+                   if (score >= hiScore) {
+                    hiScore = score;
+                    canUpScroe = false;
+                    localStorage.setItem('hiScore', hiScore);
+                    }
                    if (level === 3)
                    {
                     GameState = WIN
