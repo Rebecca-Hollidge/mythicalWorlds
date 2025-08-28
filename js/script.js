@@ -1,7 +1,7 @@
-
-
 const canvas = document.getElementById("the_canvas")
 const context = canvas.getContext("2d");
+
+let username = "null"
 
 let mouseX = 0
 let mouseY = 0
@@ -47,7 +47,8 @@ let score = 0;
 let hiScore = localStorage.getItem('hiScore') || 0;
 // let score = 0;
 
-let username = localStorage.getItem('username');
+
+
 
 
 //if (!username) {
@@ -58,7 +59,7 @@ let username = localStorage.getItem('username');
        // username = "Player"; // default if user cancels
   //  }
 //}
-    
+
 
 
 function addName() {
@@ -70,7 +71,6 @@ function addName() {
 //localStorage.setItem("username", username);
 // key - value pair
 //const username = localStorage.getItem('username', username);
-console.log(username);
 
 
 //addName();
@@ -549,6 +549,10 @@ function drawTimer() {
 
 
 function update() {
+    if (canvas.style.display === "block")
+    {
+        username = localStorage.getItem('username');
+    }
     // console.log("Update");
     // Check Input
     if (gamerInput.action === "Up") {
@@ -693,7 +697,11 @@ mazeLevel3 = [[0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1],
 
 maze = mazeLevel1
 
+let input_form = document.forms["helloForm"];
+
 function startGame() {
+    input_form.style.display = "none";
+    canvas.style.display = "block";
     //level one pos/timer
   level = 0;
   gomush.x = 0;
@@ -706,12 +714,9 @@ function startGame() {
   gameOverPlayed = false;
 }
 
-startGame();
-
 function nextLevel()
 {
    // completeLevel();
-    console.log(speed)
     if (GameState != GAMEPLAY)
     {
         return
@@ -728,7 +733,7 @@ function nextLevel()
    else
          if (level === 1)
     {
-        console.log("help")
+        console.log("yay")
         setTimer();
         console.log("Level 1 " + level)
         gomush.x = 0;//pos 
@@ -794,7 +799,6 @@ for (let r = 0; r < ROWS; r++) {
    
              
             if (maze[r][c] === 1 && isColliding(gomush, bush[r][c])) {
-                         console.log("bush");
                          if (gamerInput.action === "Up") gomush.y += speed;
                 if (gamerInput.action === "Down") gomush.y -= speed;
                 if (gamerInput.action === "Left") gomush.x += speed;
@@ -882,6 +886,5 @@ window.addEventListener('keydown', input);
 // disable the second event listener if you want continuous movement
 window.addEventListener('keyup', input);
 window.requestAnimationFrame(gameloop);
-
 
 

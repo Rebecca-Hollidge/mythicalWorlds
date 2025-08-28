@@ -9,7 +9,6 @@
    <link href="css/style.css" rel="stylesheet" text="text/css">
   <!----<link href = nipple.js> link ? ---->
    
-
 </head>
 <body>
    <!---- <form name="usernameForm" onsubmit="saveUsername();startGame();return false">
@@ -18,9 +17,9 @@
         <input type="submit" value="Submit">
       </form> 
       --->
-       <h1 id="main-header"> What is your name?</h1>
 
-    <form name="helloForm" method="get" onsubmit="validateForm();return false">
+    <form name="helloForm" onsubmit="validateForm();startGame();return false">
+          <label for="uname">What is your name?</label><br>
          <input type="text" id="username" placeholder="Enter your name" ></input>
         <input type="submit" id="saveUsernameBtn"></input>
     </form>
@@ -67,10 +66,8 @@
       </div>
          
     </div>
-<script type="text/javascript" src="js/script.js"></script>
-<script type="text/javascript" src="js/storage.js"></script>
 
- 
 
+ <script type="text/javascript" src="js/script.js"></script>
+ <script type="text/javascript" src="js/storage.js"></script>
 </html>
-
