@@ -87,7 +87,7 @@ let canUpScroe = false
 
 var rainAudio = new Audio('img/raindrop.mp4');
 var backgroundAudio = new Audio('img/mushroom.mp4');
-var winAudio = new Audio ("img/winsong.mp4");
+var winAudio = new Audio ("img/winSong.mp4");
 var gameOverAudio = new Audio ("img/gameOverSong.mp4")
 
 
@@ -96,7 +96,7 @@ const musicToggleBtn = document.getElementById('musicToggleBtn');
 
 // WIN Lose screens
 let gameOverSprite = new Image();
-gameOverSprite.src = "img/gameOver.png";
+gameOverSprite.src = "img/gameover.png";
 
 let youWinSprite = new Image();
 youWinSprite.src = "img/youWin.png";
