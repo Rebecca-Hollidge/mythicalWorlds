@@ -293,6 +293,8 @@ function getMousePosition(canvas, event)
   //  mouseY = event.clientY - rect.top;
    // console.log("Coordinate x: " + mouseX,
    //             "Coordinate y: " + mouseY);
+    let scaleX = canvas.width / rect.width;
+    let scaleY = canvas.height / rect.height;
     if (event.touches) { 
         // Touch 
         mouseX = event.touches[0].clientX - rect.left;
