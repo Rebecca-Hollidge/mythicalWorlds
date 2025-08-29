@@ -33,13 +33,13 @@ let currentDirection = 0;
 let speed = 4;
 
 let button1Width = 150; // Scale with image
-let button1Hight = 50;
+let button1Height = 50;
 
 let button2Width = 150;// Scale with image
-let button2Hight = 50;
+let button2Height = 50;
 
 let button3Width = 150; // Scale with image
-let button3Hight = 50;
+let button3Height = 50;
 //let width = 1100 
 //let height = 500const 
 //const username = localStorage.getItem('username');
@@ -114,20 +114,20 @@ button2Sprite.src = "img/button2.png";
 let button3Sprite = new Image();
 button3Sprite.src = "img/button3.png";
 
-let startbutton = new GameObject(button1Sprite, 0, 0, button1Width, button1Hight)
+let startbutton = new GameObject(button1Sprite, 0, 0, button1Width, button1Height)
 
 startbutton.x = (canvas.width / 2) - (button1Width / 2)
-startbutton.y = (canvas.height / 2) - (button1Hight / 2)
+startbutton.y = (canvas.height / 2) - (button1Height / 2)
 
-let nextbutton = new GameObject(button2Sprite, 0, 0, button2Width, button2Hight)
+let nextbutton = new GameObject(button2Sprite, 0, 0, button2Width, button2Height)
 
 nextbutton.x = (canvas.width / 2) - (button2Width / 2)
-nextbutton.y = (canvas.height / 2) - (button2Hight / 2)
+nextbutton.y = (canvas.height / 2) - (button2Height / 2)
 
-let playAgainButton = new GameObject(button3Sprite, 0, 0, button3Width, button3Hight)
+let playAgainButton = new GameObject(button3Sprite, 0, 0, button3Width, button3Height)
 
 playAgainButton.x = (canvas.width / 2) - (button3Width / 2)
-playAgainButton.y = (canvas.height / 2) - (button3Hight / 2)
+playAgainButton.y = (canvas.height / 2) - (button3Height / 2)
 
 //let loseButton = new GameObject(buttonSprite, 0, 0, buttonWidth, buttonHight)
 
@@ -267,11 +267,9 @@ if (GameState === LOSE) {
 
 
 canvas.addEventListener("touchstart", function (e) {
-    let touch = e.touches[0]; // get the first touch point
-    getMousePosition(canvas, touch);
-    
+    e.preventDefault(); // prevent scrolling
+    getMousePosition(canvas, e); // pass full event
     buttonPress();
-    e.preventDefault(); // prevent scrolling while tapping the canvas
 }, { passive: false });
 
 //music button / loop
@@ -286,26 +284,22 @@ musicToggleBtn.addEventListener('click', () => {
   }
 });
 
-function getMousePosition(canvas, event) 
-{
-    let rect = canvas.getBoundingClientRect();
-   // mouseX = event.clientX - rect.left;
-  //  mouseY = event.clientY - rect.top;
-   // console.log("Coordinate x: " + mouseX,
-   //             "Coordinate y: " + mouseY);
-    let scaleX = canvas.width / rect.width;
-    let scaleY = canvas.height / rect.height;
-    if (event.touches) { 
+function getMousePosition(canvas, event) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+
+    if (event.touches && event.touches.length > 0) {
         // Touch 
-        mouseX = event.touches[0].clientX - rect.left;
-        mouseY = event.touches[0].clientY - rect.top;
-    } else {
-        // Mouse 
-        mouseX = event.clientX - rect.left;
-        mouseY = event.clientY - rect.top;
+        mouseX = (event.touches[0].clientX - rect.left) * scaleX;
+        mouseY = (event.touches[0].clientY - rect.top) * scaleY;
+    } else if (event.clientX !== undefined && event.clientY !== undefined) {
+        // Mouce 
+        mouseX = (event.clientX - rect.left) * scaleX;
+        mouseY = (event.clientY - rect.top) * scaleY;
     }
 
-    console.log("cordinate x: " + mouseX, "Coordinate y: " + mouseY);
+    console.log("Mouse/Touch X:", mouseX, "Y:", mouseY);
 }
 
 canvas.addEventListener("mousedown", function (e)
@@ -325,9 +319,11 @@ function buttonPress()
 {
     if (GameState === START)
     {
-        if (mouseX > startbutton.x && mouseX < startbutton.x + button1Width)
+        if (mouseX > startbutton.x && mouseX < startbutton.x + button1Width  &&
+    mouseY > startbutton.y && mouseY < startbutton.y + button1Height)
         {
-            if (mouseY > startbutton.y && mouseY < startbutton.y + button1Hight)
+            if (mouseY > startbutton.y && mouseY < startbutton.y + button1Height  &&
+    mouseY > startbutton.y && mouseY < startbutton.y + button1Height)
             {
                 GameState = GAMEPLAY
                 startGame()
@@ -337,9 +333,11 @@ function buttonPress()
         
     if (GameState === WIN)
     {
-        if (mouseX > playAgainButton.x && mouseX < playAgainButton.x + button3Width)
+        if (mouseX > playAgainButton.x && mouseX < playAgainButton.x + button3Width  &&
+    mouseY > startbutton.y && mouseY < startbutton.y + button1Height)
         {
-            if (mouseY > playAgainButton.y && mouseY < playAgainButton.y + button3Hight)
+            if (mouseY > playAgainButton.y && mouseY < playAgainButton.y + button3Height  &&
+    mouseY > startbutton.y && mouseY < startbutton.y + button1Height)
             {
                GameState = GAMEPLAY
                startGame()
@@ -349,9 +347,11 @@ function buttonPress()
 
     if (GameState === LOSE)
     {
-       if (mouseX > playAgainButton.x && mouseX < playAgainButton.x + button3Width)
+       if (mouseX > playAgainButton.x && mouseX < playAgainButton.x + button3Width  &&
+    mouseY > startbutton.y && mouseY < startbutton.y + button1Height)
         {
-            if (mouseY > playAgainButton.y && mouseY < playAgainButton.y + button3Hight)
+            if (mouseY > playAgainButton.y && mouseY < playAgainButton.y + button3Height  &&
+    mouseY > startbutton.y && mouseY < startbutton.y + button1Height)
             {
                 GameState = GAMEPLAY
                 startGame()
@@ -361,9 +361,11 @@ function buttonPress()
 
     if (GameState === GAMEPLAY && levelComplete)
     {
-        if (mouseX > nextbutton.x && mouseX < nextbutton.x + button2Width)
+        if (mouseX > nextbutton.x && mouseX < nextbutton.x + button2Width  &&
+    mouseY > startbutton.y && mouseY < startbutton.y + button1Height)
         {
-            if (mouseY > nextbutton.y && mouseY < nextbutton.y + button2Hight)
+            if (mouseY > nextbutton.y && mouseY < nextbutton.y + button2Height  &&
+    mouseY > startbutton.y && mouseY < startbutton.y + button1Height)
             {
                 levelComplete = false
 
@@ -432,6 +434,13 @@ redButton.addEventListener("mouseup", () => gamerInput = new GamerInput("None"))
 
 greenButton.addEventListener("mousedown", () => gamerInput = new GamerInput("Down"));
 greenButton.addEventListener("mouseup", () => gamerInput = new GamerInput("None"));
+
+
+
+
+
+
+
 function input(event) {
     // Take Input from the Player
     // console.log("Input");
