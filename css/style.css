@@ -1,3 +1,15 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;   
+  touch-action: none; 
+}
+
+canvas {
+  touch-action: none; 
+}
+
+
 body{
     min-height: 100vh;
 }
@@ -20,8 +32,9 @@ form {
 border:none;
 color :rgb(10, 98, 25);
 text-align: center;
-font-size: 16px;
+font-size: 30px;
 text-decoration-color: black;
+
     
 }
 .button:hover {
