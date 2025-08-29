@@ -1,7 +1,7 @@
 const canvas = document.getElementById("the_canvas")
 const context = canvas.getContext("2d");
 
-let username = "null"
+let username = "friend"
 
 let mouseX = 0
 let mouseY = 0
@@ -269,6 +269,7 @@ if (GameState === LOSE) {
 canvas.addEventListener("touchstart", function (e) {
     let touch = e.touches[0]; // get the first touch point
     getMousePosition(canvas, touch);
+    
     buttonPress();
     e.preventDefault(); // prevent scrolling while tapping the canvas
 }, { passive: false });
@@ -288,10 +289,21 @@ musicToggleBtn.addEventListener('click', () => {
 function getMousePosition(canvas, event) 
 {
     let rect = canvas.getBoundingClientRect();
-    mouseX = event.clientX - rect.left;
-    mouseY = event.clientY - rect.top;
-    console.log("Coordinate x: " + mouseX,
-                "Coordinate y: " + mouseY);
+   // mouseX = event.clientX - rect.left;
+  //  mouseY = event.clientY - rect.top;
+   // console.log("Coordinate x: " + mouseX,
+   //             "Coordinate y: " + mouseY);
+    if (event.touches) { 
+        // Touch 
+        mouseX = event.touches[0].clientX - rect.left;
+        mouseY = event.touches[0].clientY - rect.top;
+    } else {
+        // Mouse 
+        mouseX = event.clientX - rect.left;
+        mouseY = event.clientY - rect.top;
+    }
+
+    console.log("cordinate x: " + mouseX, "Coordinate y: " + mouseY);
 }
 
 canvas.addEventListener("mousedown", function (e)
@@ -888,7 +900,7 @@ function gameloop() {
    
 }
 
-window.addEventListener('touch', input);
+window.addEventListener('touchstart', input);
 window.addEventListener('keydown', input);
 window.addEventListener('keyup', input);
 window.requestAnimationFrame(gameloop);
