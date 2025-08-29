@@ -266,6 +266,12 @@ if (GameState === LOSE) {
 }
 
 
+canvas.addEventListener("touchstart", function (e) {
+    let touch = e.touches[0]; // get the first touch point
+    getMousePosition(canvas, touch);
+    buttonPress();
+    e.preventDefault(); // prevent scrolling while tapping the canvas
+}, { passive: false });
 
 //music button / loop
 musicToggleBtn.addEventListener('click', () => {
@@ -882,8 +888,8 @@ function gameloop() {
    
 }
 
+window.addEventListener('touch', input);
 window.addEventListener('keydown', input);
-// disable the second event listener if you want continuous movement
 window.addEventListener('keyup', input);
 window.requestAnimationFrame(gameloop);
 
