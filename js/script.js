@@ -312,7 +312,7 @@ canvas.addEventListener("mousedown", function (e)
 
 //if (blueButton)
 
-
+//blueS
 //})
 
 function buttonPress()
