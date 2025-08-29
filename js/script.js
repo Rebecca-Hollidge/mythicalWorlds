@@ -425,16 +425,27 @@ let greenButton = document.getElementsByClassName("green")[0];
 
 yellowButton.addEventListener("mousedown", () => gamerInput = new GamerInput("Up"));
 yellowButton.addEventListener("mouseup", () => gamerInput = new GamerInput("None"));
+yellowButton.addEventListener("touchstart", () => gamerInput = new GamerInput("Up"));
+yellowButton.addEventListener("touchend", () => gamerInput = new GamerInput("None"));
+yellowButton.addEventListener("touchcancel", () => gamerInput = new GamerInput("None"));
 
 blueButton.addEventListener("mousedown", () => gamerInput = new GamerInput("Left"));
 blueButton.addEventListener("mouseup", () => gamerInput = new GamerInput("None"));
+blueButton.addEventListener("touchstart", () => gamerInput = new GamerInput("Left"));
+blueButton.addEventListener("touchend",  () => gamerInput = new GamerInput("None"));
+blueButton.addEventListener("touchcancel", () => gamerInput = new GamerInput("None"));
 
 redButton.addEventListener("mousedown", () => gamerInput = new GamerInput("Right"));
 redButton.addEventListener("mouseup", () => gamerInput = new GamerInput("None"));
+redButton.addEventListener("touchstart", () => gamerInput = new GamerInput("Right"));
+redButton.addEventListener("touchend",  () => gamerInput = new GamerInput("None"));
+redButton.addEventListener("touchcancel", () => gamerInput = new GamerInput("None"));
 
 greenButton.addEventListener("mousedown", () => gamerInput = new GamerInput("Down"));
 greenButton.addEventListener("mouseup", () => gamerInput = new GamerInput("None"));
-
+greenButton.addEventListener("touchstart", () => gamerInput = new GamerInput("Down"));
+greenButton.addEventListener("touchend",  () => gamerInput = new GamerInput("None"));
+greenButton.addEventListener("touchcancel", () => gamerInput = new GamerInput("None"));
 
 
 

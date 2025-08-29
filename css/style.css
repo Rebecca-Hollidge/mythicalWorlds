@@ -34,7 +34,11 @@ color :rgb(10, 98, 25);
 text-align: center;
 font-size: 30px;
 text-decoration-color: black;
-
+-webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
     
 }
 .button:hover {
