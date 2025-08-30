@@ -267,18 +267,12 @@ if (GameState === LOSE) {
 
 
 
-
 function bindButton(button, action) {
-  // Mouse
-  button.addEventListener("mousedown", () => gamerInput = new GamerInput(action));
-  button.addEventListener("mouseup",   () => gamerInput = new GamerInput("None"));
-  
-  button.addEventListener("touchstart", (e) => {
-    e.preventDefault(); // stop mouse event firing after touch
-    gamerInput = new GamerInput(action);
-  }, { passive: false });
-  button.addEventListener("touchend",   () => gamerInput = new GamerInput("None"));
-  button.addEventListener("touchcancel",() => gamerInput = new GamerInput("None"));
+    button.addEventListener("mousedown", () => gamerInput.action = action);
+    button.addEventListener("mouseup",   () => gamerInput.action = "None");
+    button.addEventListener("touchstart", (e) => { e.preventDefault(); gamerInput.action = action; }, {passive: false});
+    button.addEventListener("touchend",   () => gamerInput.action = "None");
+    button.addEventListener("touchcancel",() => gamerInput.action = "None");
 }
 
 
@@ -314,8 +308,22 @@ function getMousePosition(canvas, event) {
     console.log("Mouse/Touch X:", mouseX, "Y:", mouseY);
 }
 
+
+canvas.addEventListener("touchstart", (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+
+    mouseX = (e.touches[0].clientX - rect.left) * scaleX;
+    mouseY = (e.touches[0].clientY - rect.top) * scaleY;
+
+    buttonPress();
+}, { passive: false });
+
+
 canvas.addEventListener("mousedown", function (e)
 {
+
     getMousePosition(canvas, e)
     buttonPress()
 })
@@ -501,67 +509,7 @@ function input(event) {
                 speed = 5;  
             
    }
-     if (event.type === "click") {
-        switch (event.key) {
-            case "blueButton": // Left Arrow // blue
-                //gamerInput = new GamerInput("Left");
-                blueButton.classList.add("left");
-                break; //Left key
-            case "yellowButton": // Up Arrow // yellow
-                yellowButton.classList.add("up");
-                //gamerInput = new GamerInput("Up");
-                break; //Up key
-            case "redButton": // Right Arrow // red
-                redButton.classList.add("right");    
-                //gamerInput = new GamerInput("Right");
-                break; //Right key
-            case "greenButtom": // Down Arrow // green
-                greenButton.classList.add("down");
-                //gamerInput = new GamerInput("Down");
-                break; //Down key
-            default:
-                //gamerInput = new GamerInput("None"); //No Input
-        }
-    } else {
-        //gamerInput = new GamerInput("None");
-        redButton.classList.remove("right");
-        blueButton.classList.remove("left");
-        yellowButton.classList.remove("up");
-        greenButton.classList.remove("down");
 
-    }
-    speed = 5;
-
-if (event.type === "touchstart") {
-        switch (event.key) {
-            case "blueButton": // Left Arrow // blue
-                //gamerInput = new GamerInput("Left");
-                blueButton.classList.add("left");
-                break; //Left key
-            case "yellowButton": // Up Arrow // yellow
-                yellowButton.classList.add("up");
-                //gamerInput = new GamerInput("Up");
-                break; //Up key
-            case "redButton": // Right Arrow // red
-                redButton.classList.add("right");    
-                //gamerInput = new GamerInput("Right");
-                break; //Right key
-            case "greenButtom": // Down Arrow // green
-                greenButton.classList.add("down");
-                //gamerInput = new GamerInput("Down");
-                break; //Down key
-            default:
-                //gamerInput = new GamerInput("None"); //No Input
-        }
-    } else {
-        //gamerInput = new GamerInput("None");
-        redButton.classList.remove("right");
-        blueButton.classList.remove("left");
-        yellowButton.classList.remove("up");
-        greenButton.classList.remove("down");
-
-    }
-    speed = 5;
 
 }
 
