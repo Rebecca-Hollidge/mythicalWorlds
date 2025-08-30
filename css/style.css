@@ -28,11 +28,27 @@ form {
   display: block;
 }
 
+
+.button2{
+border:none;
+color :rgb(10, 98, 25);
+text-align: center;
+font-size: 40px;
+text-decoration-color: black;
+-webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+    
+}
+
+
 .button{
 border:none;
 color :rgb(10, 98, 25);
 text-align: center;
-font-size: 30px;
+font-size: 40px;
 text-decoration-color: black;
 -webkit-tap-highlight-color: transparent;
   -webkit-user-select: none;
@@ -86,19 +102,7 @@ font-family: Arial;
 
 }
 
-.button2 {
-border: 2px solid black;                 
-  outline: 2px solid rgb(28, 95, 11); 
-color :rgb(19, 71, 13);
-text-align: left;
-font-size: 30px;
 
-background-color: #a0ddae;
-font-family: Arial;
-padding: 10px;
- border-radius: 6px;
-   text-decoration-color: black;
-}
 
 .hover {
 color: #fabcc6;

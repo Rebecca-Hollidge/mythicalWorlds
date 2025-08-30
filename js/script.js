@@ -266,11 +266,23 @@ if (GameState === LOSE) {
 }
 
 
-canvas.addEventListener("touchstart", function (e) {
-    e.preventDefault(); // prevent scrolling
-    getMousePosition(canvas, e); // pass full event
-    buttonPress();
-}, { passive: false });
+
+
+function bindButton(button, action) {
+  // Mouse
+  button.addEventListener("mousedown", () => gamerInput = new GamerInput(action));
+  button.addEventListener("mouseup",   () => gamerInput = new GamerInput("None"));
+  
+  button.addEventListener("touchstart", (e) => {
+    e.preventDefault(); // stop mouse event firing after touch
+    gamerInput = new GamerInput(action);
+  }, { passive: false });
+  button.addEventListener("touchend",   () => gamerInput = new GamerInput("None"));
+  button.addEventListener("touchcancel",() => gamerInput = new GamerInput("None"));
+}
+
+
+
 
 //music button / loop
 musicToggleBtn.addEventListener('click', () => {
@@ -418,38 +430,41 @@ function clickDpadRed(){
 function clickDpadGreen(){
     console.log(event);
 }
+
+
+//yellowButton.addEventListener("mousedown", () => gamerInput = new GamerInput("Up"));
+//yellowButton.addEventListener("mouseup", () => gamerInput = new GamerInput("None"));
+//yellowButton.addEventListener("touchstart", () => gamerInput = new GamerInput("Up"));
+//yellowButton.addEventListener("touchend", () => gamerInput = new GamerInput("None"));
+//yellowButton.addEventListener("touchcancel", () => gamerInput = new GamerInput("None"));
+
+//blueButton.addEventListener("mousedown", () => gamerInput = new GamerInput("Left"));
+//blueButton.addEventListener("mouseup", () => gamerInput = new GamerInput("None"));
+//blueButton.addEventListener("touchstart", () => gamerInput = new GamerInput("Left"));
+//blueButton.addEventListener("touchend",  () => gamerInput = new GamerInput("None"));
+//blueButton.addEventListener("touchcancel", () => gamerInput = new GamerInput("None"));
+
+//redButton.addEventListener("mousedown", () => gamerInput = new GamerInput("Right"));
+//redButton.addEventListener("mouseup", () => gamerInput = new GamerInput("None"));
+//redButton.addEventListener("touchstart", () => gamerInput = new GamerInput("Right"));
+//redButton.addEventListener("touchend",  () => gamerInput = new GamerInput("None"));
+//redButton.addEventListener("touchcancel", () => gamerInput = new GamerInput("None"));
+
+//greenButton.addEventListener("mousedown", () => gamerInput = new GamerInput("Down"));
+//greenButton.addEventListener("mouseup", () => gamerInput = new GamerInput("None"));
+//greenButton.addEventListener("touchstart", () => gamerInput = new GamerInput("Down"));
+//greenButton.addEventListener("touchend",  () => gamerInput = new GamerInput("None"));
+//greenButton.addEventListener("touchcancel", () => gamerInput = new GamerInput("None"));
+
 let yellowButton = document.getElementsByClassName("yellow")[0];
 let blueButton = document.getElementsByClassName("blue")[0];
 let redButton = document.getElementsByClassName("red")[0];
 let greenButton = document.getElementsByClassName("green")[0];
 
-yellowButton.addEventListener("mousedown", () => gamerInput = new GamerInput("Up"));
-yellowButton.addEventListener("mouseup", () => gamerInput = new GamerInput("None"));
-yellowButton.addEventListener("touchstart", () => gamerInput = new GamerInput("Up"));
-yellowButton.addEventListener("touchend", () => gamerInput = new GamerInput("None"));
-yellowButton.addEventListener("touchcancel", () => gamerInput = new GamerInput("None"));
-
-blueButton.addEventListener("mousedown", () => gamerInput = new GamerInput("Left"));
-blueButton.addEventListener("mouseup", () => gamerInput = new GamerInput("None"));
-blueButton.addEventListener("touchstart", () => gamerInput = new GamerInput("Left"));
-blueButton.addEventListener("touchend",  () => gamerInput = new GamerInput("None"));
-blueButton.addEventListener("touchcancel", () => gamerInput = new GamerInput("None"));
-
-redButton.addEventListener("mousedown", () => gamerInput = new GamerInput("Right"));
-redButton.addEventListener("mouseup", () => gamerInput = new GamerInput("None"));
-redButton.addEventListener("touchstart", () => gamerInput = new GamerInput("Right"));
-redButton.addEventListener("touchend",  () => gamerInput = new GamerInput("None"));
-redButton.addEventListener("touchcancel", () => gamerInput = new GamerInput("None"));
-
-greenButton.addEventListener("mousedown", () => gamerInput = new GamerInput("Down"));
-greenButton.addEventListener("mouseup", () => gamerInput = new GamerInput("None"));
-greenButton.addEventListener("touchstart", () => gamerInput = new GamerInput("Down"));
-greenButton.addEventListener("touchend",  () => gamerInput = new GamerInput("None"));
-greenButton.addEventListener("touchcancel", () => gamerInput = new GamerInput("None"));
-
-
-
-
+bindButton(yellowButton, "Up");
+bindButton(blueButton,   "Left");
+bindButton(redButton,    "Right");
+bindButton(greenButton,  "Down");
 
 
 function input(event) {
@@ -516,6 +531,38 @@ function input(event) {
 
     }
     speed = 5;
+
+if (event.type === "touchstart") {
+        switch (event.key) {
+            case "blueButton": // Left Arrow // blue
+                //gamerInput = new GamerInput("Left");
+                blueButton.classList.add("left");
+                break; //Left key
+            case "yellowButton": // Up Arrow // yellow
+                yellowButton.classList.add("up");
+                //gamerInput = new GamerInput("Up");
+                break; //Up key
+            case "redButton": // Right Arrow // red
+                redButton.classList.add("right");    
+                //gamerInput = new GamerInput("Right");
+                break; //Right key
+            case "greenButtom": // Down Arrow // green
+                greenButton.classList.add("down");
+                //gamerInput = new GamerInput("Down");
+                break; //Down key
+            default:
+                //gamerInput = new GamerInput("None"); //No Input
+        }
+    } else {
+        //gamerInput = new GamerInput("None");
+        redButton.classList.remove("right");
+        blueButton.classList.remove("left");
+        yellowButton.classList.remove("up");
+        greenButton.classList.remove("down");
+
+    }
+    speed = 5;
+
 }
 
 
