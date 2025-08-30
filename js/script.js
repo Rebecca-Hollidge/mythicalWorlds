@@ -584,6 +584,9 @@ function drawTimer() {
 
 
 function update() {
+//    if (gamerInput.action === "Up") gomush.y -= speed;
+//else if (gamerInput.action === "Down") gomush.y += speed;
+
     if (canvas.style.display === "block")
     {
         username = localStorage.getItem('username');
