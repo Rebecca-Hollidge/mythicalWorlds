@@ -270,7 +270,7 @@ if (GameState === LOSE) {
 function bindButton(button, action) {
     button.addEventListener("mousedown", () => gamerInput.action = action);
     button.addEventListener("mouseup",   () => gamerInput.action = "None");
-    button.addEventListener("touchstart", (e) => { e.preventDefault(); gamerInput.action = action; }, {passive: false});
+    button.addEventListener("touchstart", () => { gamerInput.action = action}, {passive: false});
     button.addEventListener("touchend",   () => gamerInput.action = "None");
     button.addEventListener("touchcancel",() => gamerInput.action = "None");
 }
@@ -470,9 +470,9 @@ let redButton = document.getElementsByClassName("red")[0];
 let greenButton = document.getElementsByClassName("green")[0];
 
 bindButton(yellowButton, "Up");
-bindButton(blueButton,   "Left");
-bindButton(redButton,    "Right");
-bindButton(greenButton,  "Down");
+bindButton(blueButton, "Left");
+bindButton(redButton, "Right");
+bindButton(greenButton, "Down");
 
 
 function input(event) {
@@ -483,7 +483,6 @@ function input(event) {
 
     if (event.type === "keydown") {
         switch (event.keyCode) {
-             
             case 37: // Left Arrow
                 gamerInput = new GamerInput("Left");
                 break; //Left key
@@ -504,7 +503,8 @@ function input(event) {
         }
 
    } else {
-        gamerInput = new GamerInput("None");
+        if (event.type != "touchstart")
+        {gamerInput = new GamerInput("None");}
       
                 speed = 5;  
             
@@ -594,6 +594,7 @@ function update() {
     // console.log("Update");
     // Check Input
     if (gamerInput.action === "Up") {
+        console.log("up")
         if (gomush.y < 0){
             console.log("player at top edge");
 
